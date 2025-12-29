@@ -21,3 +21,7 @@ bool Dealer::wantsHit(){
 Card* Dealer::upCard(){
     return hand.getCard(0);
 }
+
+Hand& Dealer::getHand(){
+    return hand;
+}

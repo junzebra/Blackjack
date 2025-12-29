@@ -14,6 +14,7 @@ class Dealer{
         void reset();
         bool wantsHit();
         Card* upCard();
+        Hand& getHand();
 };
 
 #endif

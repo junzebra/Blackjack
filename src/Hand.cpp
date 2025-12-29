@@ -13,6 +13,11 @@ int Hand::add(){
         sum += n->getVal();
         }
     }
+    return sum;
+}
+
+int Hand::size(){
+    return cards.size();
 }
 
 void Hand::reset(){

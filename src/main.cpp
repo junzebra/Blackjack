@@ -1,7 +1,8 @@
 
-#include "../include/Deck.h"
-#include <iostream>
+#include "../include/Game.h"
 
 int main() {
+    Game game;
+    game.run();
     return 0;
 }

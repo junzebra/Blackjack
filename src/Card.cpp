@@ -15,4 +15,6 @@ int Card::getVal() {
         return 10;
     } else if (rank == Rank::Ace) {
         return 11;
+    }
+    return 0; // Default case, should not reach here
 }

@@ -9,6 +9,7 @@ class Hand{
     std::vector<Card*> cards = {};
     public:
     int add();
+    int size();
     void reset();
     void append(Card* k);
     void pop();

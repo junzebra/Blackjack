@@ -11,8 +11,8 @@ class Player{
         int initBet;
         Hand hand;
         Hand handSplit;
-        bool isPlaying = true;
     public:
+        bool isPlaying = true;
         Player(int m, int b) : money(m),initBet(b) {};
         void play();
         void hit(Hand& h,Deck& deck);
@@ -21,23 +21,27 @@ class Player{
         void doubleDown(Hand& h,Deck& deck);
         void reset();
         void payout(int p);
-        virtual void decideMove(Hand& h,Deck& deck,Dealer& dealer);
+        void printMoney();
+        Hand& getHand();
+        virtual void decideMove(Hand& h,Deck& deck,Dealer& dealer) = 0;
+        virtual ~Player() = default;
+
 };
 
-class Amateur : Player{
+class Amateur : public Player{
     public:
         Amateur(int m, int b) : Player(m,b) {};
         void decideMove(Hand& h,Deck& deck,Dealer& dealer)override;
 };
 
 //rules from online guidebook
-class Textbook : Player{
+class Textbook : public Player{
     public:
         Textbook(int m, int b) : Player(m,b) {};
         void decideMove(Hand& h,Deck& deck,Dealer& dealer) override;
 };
 
-class CardCounter : Player{
+class CardCounter : public Player{
     public:
         CardCounter(int m, int b) : Player(m,b) {};
         void decideMove(Hand& h,Deck& deck,Dealer& dealer) override;
