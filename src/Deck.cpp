@@ -42,5 +42,9 @@ void Deck::updateCardCount(){
 }
 
 Card* Deck::nextCard(){
-    return deckArray[cardCount+1];
+    return deckArray[cardCount];
+}
+
+int Deck::getCardCount(){
+    return cardCount;
 }

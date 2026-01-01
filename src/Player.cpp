@@ -16,8 +16,10 @@ void Player::stand(){
 }
 
 void Player::split(){
+
     handSplit.append(hand.getCard(1));
     hand.pop();
+    
 }
 
 void Player::doubleDown(Hand& h,Deck& deck){
@@ -34,6 +36,16 @@ void Player::reset(){
 
 void Player::payout(int p){
     money += p;
+}
+
+
+void Player::placeBet(int b){
+    money -= b;
+    betPlaced = b;
+}
+
+int Player::getBetPlaced(){
+    return betPlaced;
 }
 
 Hand& Player::getHand(){
@@ -65,6 +77,11 @@ void CardCounter::decideMove(Hand& h, Deck& deck,Dealer& dealer){
 void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
     int upCard = dealer.upCard() -> getVal();
 
+
+    if(hand.size()<2){
+        hit(h,deck);
+        return;
+    }
     //splits
     if(hand.getCard(0)->getRank()==hand.getCard(1)->getRank() && handSplit.isEmpty()){
         Rank n = hand.getCard(0)->getRank();

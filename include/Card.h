@@ -22,6 +22,7 @@ class Card {
         Suit getSuit();
         Rank getRank();
         int getVal();
+        std::string toString();
 };
 
 #endif

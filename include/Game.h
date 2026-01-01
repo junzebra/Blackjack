@@ -20,7 +20,7 @@ class Game{
         void clearPlayers();
         void setShuffle();
         Hand getHand(Player* p);
-        void run();
+        void run(int runs);
 
 };
 

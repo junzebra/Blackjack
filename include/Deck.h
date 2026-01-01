@@ -18,6 +18,7 @@ class Deck{
         void shuffle();
         void resetCardCount();
         void updateCardCount();
+        int getCardCount();
         Card* nextCard();
 
 };

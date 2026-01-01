@@ -8,6 +8,9 @@ int Hand::add(){
             if(temp > 21){
                 sum += 1;
             }
+            else{
+                sum += 11;
+            }
         }
         else{
         sum += n->getVal();

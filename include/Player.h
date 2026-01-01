@@ -9,6 +9,7 @@ class Player{
     protected:
         int money;
         int initBet;
+        int betPlaced;
         Hand hand;
         Hand handSplit;
     public:
@@ -20,9 +21,12 @@ class Player{
         void split();
         void doubleDown(Hand& h,Deck& deck);
         void reset();
+        void placeBet(int b);
+        int getBetPlaced();
         void payout(int p);
         void printMoney();
         Hand& getHand();
+        Hand& getHandSplit(){ return handSplit; }
         virtual void decideMove(Hand& h,Deck& deck,Dealer& dealer) = 0;
         virtual ~Player() = default;
 
