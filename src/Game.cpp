@@ -2,9 +2,9 @@
 #include <iostream>
 
 void Game::initPlayers(){
-    players.push_back(new Amateur(1000,50));
-    players.push_back(new Textbook(1000,50));
-    players.push_back(new CardCounter(1000,50));
+    players.push_back(new Amateur(100000,50,"Amateur"));
+    players.push_back(new MartinGale(100000,50,"MartinGale"));
+    players.push_back(new CardCounter(100000,50,"CardCounter"));
 }
 
 void Game::initShoe(){
@@ -52,7 +52,8 @@ void Game::run(int runs) {
             player->reset();
 
             // Each player places their bet
-            player->placeBet(50); // Example bet amount
+            player->newBetAmount();
+            player->placeBet();
             // Player initial deal
             player->hit(player->getHand(),deck);
             player->hit(player->getHand(),deck);
@@ -61,6 +62,7 @@ void Game::run(int runs) {
             // Player's turn
             while(player->isPlaying){
                 
+                /*
                 //print hands for debugging
                 std::cout << "Dealer's Up Card: " << dealer.upCard()->toString() << std::endl;
                 std::cout << "Player's Hand: ";
@@ -78,7 +80,7 @@ void Game::run(int runs) {
                     }
                     std::cout << " | Total: " << splitHand.add() << std::endl;
                 }
-
+                */
                 player->decideMove(player->getHand(),deck,dealer);
             }
 
@@ -95,8 +97,38 @@ void Game::run(int runs) {
         while(dealer.wantsHit()){
             dealer.hit(deck);
         }
+        
+    
+        // Payouts
+        for(Player* player : players){
+            Hand& pHand = player->getHand();
+            Hand& dHand = dealer.getHand();
+            int pHandTotal = pHand.add();
+            int dHandTotal = dHand.add();
 
-        // Print Hands
+            if(pHandTotal == 21 && pHand.size() == 2){
+                player -> payout(player->getBetPlaced()*3); // Example payout amount
+                player -> setWinner(winnerStatus::BLACKJACK);
+            }
+            else if(pHandTotal > 21 || (dHandTotal <= 21 && dHandTotal > pHandTotal)){
+                player -> setWinner(winnerStatus::LOSE);
+                continue;
+            }
+            else if(pHandTotal == dHandTotal){
+                player -> setWinner(winnerStatus::PUSH);
+                player -> payout(player->getBetPlaced());
+            }
+            else if(pHandTotal > dHandTotal || dHandTotal > 21){
+                player -> setWinner(winnerStatus::WIN);
+                player -> payout(player->getBetPlaced()*2);
+            }
+            else{
+                continue;
+            }
+
+        }
+
+                // Print Hands
         std::cout << "Dealer's Hand: ";
         for(int i = 0; i < dealer.getHand().size(); i++){
             std::cout << dealer.getHand().getCard(i)->toString() << " ";
@@ -108,7 +140,7 @@ void Game::run(int runs) {
             for(int i = 0; i < pHand.size(); i++){
                 std::cout << pHand.getCard(i)->toString() << " ";
             }
-            std::cout << " | Total: " << pHand.add() << std::endl;
+            std::cout << " | Total: " << pHand.add() << " " << player->getWinnerString() << std::endl;
             //split hand printout
             if(!player->getHandSplit().isEmpty()){
                 std::cout << "Player's Split Hand: ";
@@ -116,38 +148,15 @@ void Game::run(int runs) {
                 for(int i = 0; i < psHand.size(); i++){
                     std::cout << psHand.getCard(i)->toString() << " ";
                 }
-                std::cout << " | Total: " << psHand.add() << std::endl;
+                std::cout << " | Total: " << psHand.add() << " " << player->getWinnerString() << std::endl;
             }
         }
-    
-        // Payouts
-        for(Player* player : players){
-            Hand& pHand = player->getHand();
-            Hand& dHand = dealer.getHand();
-            int pHandTotal = pHand.add();
-            int dHandTotal = dHand.add();
-
-            if(pHandTotal == 21){
-                player -> payout(player->getBetPlaced()*3); // Example payout amount
-            }
-            else if(pHandTotal > 21){
-                continue;
-            }
-            else if(pHandTotal == dHandTotal){
-                player -> payout(player->getBetPlaced());
-            }
-            else if(pHandTotal > dHandTotal){
-                player -> payout(player->getBetPlaced()*2);
-            }
-            else{
-                continue;
-            }
-
-    }
+            
 }
 //Balance printout after all runs
     std::cout << "Final Balances after " << runs << " runs:" << std::endl;
     for(Player* player : players){
+        std::cout << player->getName() << ": ";
         player->printMoney();
     }
 clearPlayers();

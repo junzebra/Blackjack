@@ -39,9 +39,9 @@ void Player::payout(int p){
 }
 
 
-void Player::placeBet(int b){
-    money -= b;
-    betPlaced = b;
+void Player::placeBet(){
+    money -= newBet;
+    betPlaced = newBet;
 }
 
 int Player::getBetPlaced(){
@@ -56,6 +56,49 @@ void Player::printMoney(){
     std::cout<< money << std::endl;
 }
 
+void Player::setWinner(winnerStatus w){
+    winner = w;
+}
+
+std::string Player::getWinnerString(){
+    switch(winner){
+        case winnerStatus::WIN:
+            return "WIN";
+        case winnerStatus::LOSE:
+            return "LOSE";
+        case winnerStatus::PUSH:
+            return "PUSH";
+        case winnerStatus::BLACKJACK:
+            return "BLACKJACK";
+        default:
+            return "UNKNOWN";
+    }
+}
+
+void Amateur::newBetAmount(){
+    newBet = initBet;
+}
+
+void CardCounter::newBetAmount(){
+    newBet = initBet;
+}
+
+void Textbook::newBetAmount(){
+    newBet = initBet;
+}
+
+void MartinGale::newBetAmount(){
+    if(winner == winnerStatus::WIN){
+        newBet = initBet;
+    }
+    else if (winner == winnerStatus::LOSE){
+        newBet = betPlaced * 2;
+    }
+    else {
+        newBet = betPlaced;
+    }
+}
+
 void Amateur::decideMove(Hand& h, Deck& deck,Dealer& dealer){
     if(hand.add()<16){
         hit(h,deck);
@@ -65,7 +108,17 @@ void Amateur::decideMove(Hand& h, Deck& deck,Dealer& dealer){
     }
 }
 
+
 void CardCounter::decideMove(Hand& h, Deck& deck,Dealer& dealer){
+    if(hand.add()<16){
+        hit(h,deck);
+    }
+    else{
+        stand();
+    }
+}
+
+void MartinGale::decideMove(Hand& h, Deck& deck,Dealer& dealer){
     if(hand.add()<16){
         hit(h,deck);
     }
