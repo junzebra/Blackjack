@@ -15,10 +15,12 @@ void Player::stand(){
     isPlaying = false;
 }
 
-void Player::split(){
+void Player::split(Hand& h,Deck& deck){
 
     handSplit.append(hand.getCard(1));
     hand.pop();
+    hit(hand,deck);
+    hit(handSplit,deck);
     
 }
 
@@ -131,24 +133,24 @@ void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
     int upCard = dealer.upCard() -> getVal();
 
 
-    if(hand.size()<2){
+    if(h.size()<2){
         hit(h,deck);
         return;
     }
     //splits
-    if(hand.getCard(0)->getRank()==hand.getCard(1)->getRank() && handSplit.isEmpty()){
+    if(h.getCard(0)->getRank()==h.getCard(1)->getRank() && handSplit.isEmpty()){
         Rank n = hand.getCard(0)->getRank();
         switch(n){
             case Rank::Ace:
-                split();
+                split(h,deck);
                 return;
             case Rank::Eight:
-                split();
+                split(h,deck);
                 return;
             case Rank::Two:
             case Rank::Three:
                 if(upCard>=2 && upCard<=7){ 
-                    split();
+                    split(h,deck);
                     return;
                 }
                 else{
@@ -157,7 +159,7 @@ void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
                 }
             case Rank::Four:
                 if(upCard==5 || upCard==6){
-                    split();
+                    split(h,deck);
                     return;
                 }
                 else{
@@ -166,7 +168,7 @@ void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
                 }
             case Rank::Six:
                 if(upCard>=2 && upCard<=6){
-                    split();
+                    split(h,deck);
                     return;
                 }
                 else{
@@ -175,12 +177,16 @@ void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
                 }
             case Rank::Seven:
                 if(upCard>=2 && upCard<=7){
-                    split();
+                    split(h,deck);
+                    return;
+                }
+                else{
+                    hit(h,deck);
                     return;
                 }
             case Rank::Nine:
                 if(upCard>=2 && upCard<=6 || upCard==8 || upCard==9){
-                    split();
+                    split(h,deck);
                     return;
                 }
                 else{
@@ -207,8 +213,8 @@ void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
         }
     }
     //soft totals
-    else if(hand.getCard(0)->getRank()==Rank::Ace || hand.getCard(1)->getRank()==Rank::Ace){
-        int hand_val = hand.add();
+    else if(h.getCard(0)->getRank()==Rank::Ace || h.getCard(1)->getRank()==Rank::Ace){
+        int hand_val = h.add();
 
         switch(hand_val){
             case 20:
@@ -272,7 +278,7 @@ void Textbook::decideMove(Hand& h, Deck& deck,Dealer& dealer){
 
     //hard totals
     else{
-        int hand_val = hand.add();
+        int hand_val = h.add();
 
         if(hand_val>=17){
             stand();

@@ -24,7 +24,7 @@ class Player{
         void play();
         void hit(Hand& h,Deck& deck);
         void stand();
-        void split();
+        void split(Hand& h,Deck& deck);
         void doubleDown(Hand& h,Deck& deck);
         void reset();
         void placeBet();
